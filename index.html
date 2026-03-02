@@ -6,6 +6,10 @@
     <title>OSIS To-Do-List</title>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jsPDF CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
 
 <body>
@@ -21,10 +25,45 @@
 
         <div class="header-right">
             <button id="addBtn" class="btn-primary">+ Add Task</button>
+            <button id="downloadBtn" class="btn-secondary">⬇ Download PDF</button>
         </div>
     </header>
 
     <main>
+
+        <!-- ================= STATISTICS (1 BUBBLE) ================= -->
+        <section class="stats-wrapper">
+            <div class="stats-bubble">
+
+                <div class="stat-item">
+                    <span class="stat-label">Total</span>
+                    <span class="stat-value" id="totalCount">0</span>
+                </div>
+
+                <div class="stat-divider"></div>
+
+                <div class="stat-item">
+                    <span class="stat-label">Belum / Progress</span>
+                    <span class="stat-value" id="pendingCount">0</span>
+                </div>
+
+                <div class="stat-divider"></div>
+
+                <div class="stat-item">
+                    <span class="stat-label">Selesai</span>
+                    <span class="stat-value" id="doneCount">0</span>
+                </div>
+
+                <div class="stat-divider"></div>
+
+                <div class="stat-item">
+                    <span class="stat-label">Terlambat</span>
+                    <span class="stat-value danger" id="lateCount">0</span>
+                </div>
+
+            </div>
+        </section>
+
         <section id="taskContainer" class="task-container"></section>
     </main>
 
@@ -58,6 +97,32 @@
             </div>
         </div>
     </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-left">
+                <h3>OSIS To-Do-List</h3>
+                <p>Manajemen tugas internal OSIS</p>
+                <p>Smp Negeri 2 Sukaraja.</p>
+            </div>
+
+            <div class="footer-right">
+                <p>© 2026 OSIS SMPN 2 SUKARAJA</p>
+
+                <a href="https://instagram.com/spendas_osis" target="_blank" class="footer-link">
+                    Instagram OSIS
+                </a>
+
+                <a href="https://whatsapp.com/channel/0029Vb6mQj0HQbS9ArzhH43o" target="_blank" class="footer-link">
+                    Saluran WhatsApp
+                </a>
+
+            </div>
+
+        </div>
+    </footer>
 
     <script type="module" src="app.js"></script>
 </body>
