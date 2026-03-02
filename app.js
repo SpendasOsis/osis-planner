@@ -10,18 +10,17 @@ import {
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 🔧 CONFIG LU
+// 🔧 CONFIG
 const firebaseConfig = {
-  apiKey: "AIzaSyDzmRFkcpk54IJpK9fmhRJMJv20EkubNVA",
+  apiKey: "YOUR_API_KEY",
   authDomain: "osis-planner.firebaseapp.com",
   projectId: "osis-planner",
   storageBucket: "osis-planner.firebasestorage.app",
   messagingSenderId: "1064878789071",
-  appId: "1:1064878789071:web:67c48e3bd45a3bf9e382ba",
-  measurementId: "G-0V25XCGBMZ"
+  appId: "1:1064878789071:web:67c48e3bd45a3bf9e382ba"
 };
 
-// 🚀 INIT FIREBASE
+// 🚀 INIT
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -32,6 +31,7 @@ const taskCol = collection(db, "tasks");
 const taskContainer = document.getElementById("taskContainer");
 const modal = document.getElementById("taskModal");
 
+const taskAuthor = document.getElementById("taskAuthor");
 const taskName = document.getElementById("taskName");
 const taskDesc = document.getElementById("taskDesc");
 const taskDeadline = document.getElementById("taskDeadline");
@@ -49,12 +49,14 @@ function openModal(edit = false, task = null) {
 
   if (edit && task) {
     editId = task.id;
-    taskName.value = task.name;
-    taskDesc.value = task.desc;
-    taskDeadline.value = task.deadline;
-    taskStatus.value = task.status;
+    taskAuthor.value = task.author || "";
+    taskName.value = task.name || "";
+    taskDesc.value = task.desc || "";
+    taskDeadline.value = task.deadline || "";
+    taskStatus.value = task.status || "Belum mulai";
   } else {
     editId = null;
+    taskAuthor.value = "";
     taskName.value = "";
     taskDesc.value = "";
     taskDeadline.value = "";
@@ -76,8 +78,8 @@ function getUrgency(deadline) {
 
   const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
 
-  if (diff < 0) return "urgent";
-  if (diff === 0) return "hariini";
+  if (diff < 0) return "danger";
+  if (diff === 0) return "today";
   if (diff <= 3) return "warning";
   return "normal";
 }
@@ -109,7 +111,10 @@ function renderTasks(tasks) {
 
     card.innerHTML = `
       <div class="task-title">${task.name}</div>
-      <div class="task-desc">${task.desc}</div>
+
+      <div class="task-meta">👤 ${task.author}</div>
+
+      <div class="task-desc">${task.desc || ""}</div>
       <div class="task-meta">📅 ${task.deadline}</div>
 
       <div class="task-meta hmin-text">
@@ -131,7 +136,7 @@ function renderTasks(tasks) {
   });
 }
 
-// ================= REALTIME LISTENER =================
+// ================= REALTIME =================
 onSnapshot(taskCol, snapshot => {
   const tasks = snapshot.docs.map(doc => ({
     id: doc.id,
@@ -141,7 +146,7 @@ onSnapshot(taskCol, snapshot => {
   renderTasks(tasks);
 });
 
-// ================= CRUD FIRESTORE =================
+// ================= CRUD =================
 async function addTask(task) {
   await addDoc(taskCol, task);
 }
@@ -160,12 +165,13 @@ async function deleteTask(id) {
 
 // ================= SAVE BUTTON =================
 saveBtn.onclick = async () => {
-  if (!taskName.value || !taskDeadline.value) {
-    alert("Nama & deadline wajib diisi");
+  if (!taskAuthor.value || !taskName.value || !taskDeadline.value) {
+    alert("Nama penulis, nama tugas & deadline wajib diisi");
     return;
   }
 
   const newTask = {
+    author: taskAuthor.value,
     name: taskName.value,
     desc: taskDesc.value,
     deadline: taskDeadline.value,
