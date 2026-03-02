@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>OSIS To-Do-List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <div class="logo-wrapper">
+                <img src="spendas.png" class="logo">
+                <img src="osis25.png" class="logo">
+            </div>
+            <h1>OSIS To-Do-List</h1>
+        </div>
+
+        <div class="header-right">
+            <button id="addBtn" class="btn-primary">+ Add Task</button>
+            <button id="exportBtn" class="btn-secondary">Export Task TXT</button>
+            <button id="exportTemplateBtn" class="btn-secondary">Export Template TXT</button>
+            <input type="file" id="importFile" hidden>
+            <button onclick="document.getElementById('importFile').click()" class="btn-secondary">
+                Import Task TXT
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section id="taskContainer" class="task-container"></section>
+    </main>
+
+    <!-- MODAL -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <h2>Tambah Task</h2>
+
+            <label>Template Kegiatan</label>
+            <select id="taskTemplate">
+                <option value="">-- Pilih Template --</option>
+            </select>
+
+            <label>Nama Tugas</label>
+            <input type="text" id="taskName">
+
+            <label>Deskripsi</label>
+            <textarea id="taskDesc"></textarea>
+
+            <label>Deadline</label>
+            <input type="date" id="taskDeadline">
+
+            <label>Status</label>
+            <select id="taskStatus">
+                <option>Belum mulai</option>
+                <option>Progress</option>
+                <option>Selesai</option>
+            </select>
+
+            <button type="button" id="saveTemplate" class="btn-secondary">
+                Simpan jadi Template
+            </button>
+
+            <div class="modal-actions">
+                <button id="saveTask" class="btn-primary">Simpan</button>
+                <button id="cancelTask" class="btn-secondary">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
