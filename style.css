@@ -401,3 +401,210 @@ textarea::placeholder {
         transform: translateX(2px);
     }
 }
+/* ================================================= */
+/* ================= MOBILE RESPONSIVE ============= */
+/* ================================================= */
+
+@media screen and (max-width: 992px) {
+
+    .task-container {
+        padding: 28px;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+    }
+
+    .modal-content {
+        width: min(92%, 420px);
+        max-height: 90dvh;
+    }
+}
+
+
+/* ================================================= */
+/* ================= TABLET ======================== */
+/* ================================================= */
+
+@media screen and (max-width: 768px) {
+
+    html, body {
+        min-height: 100dvh;
+    }
+
+    body {
+        background-attachment: scroll;
+        background-size: cover;
+        overflow-x: hidden;
+    }
+
+    /* ===== header stack ===== */
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        padding: 18px;
+        margin: 14px;
+    }
+
+    .header-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .header-right {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header-right button,
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+
+    .header-left h1 {
+        font-size: 20px;
+        margin-right: 20px;
+    }
+
+    /* ===== logo ===== */
+    .logo-group img.logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    img.logo {
+        width: 48px !important;
+        height: 48px !important;
+    }
+
+    /* ===== grid ===== */
+    .task-container {
+        padding: 18px;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    /* ===== card ===== */
+    .task-card {
+        padding: 18px;
+        border-radius: 18px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .task-card:hover {
+        transform: none;
+    }
+
+    /* ===== modal ===== */
+    .modal {
+        padding: 18px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 420px;
+        padding: 22px;
+        border-radius: 22px;
+
+        transform: translateY(30px) scale(0.96);
+        opacity: 0;
+        transition:
+            transform 0.45s cubic-bezier(.16, 1, .3, 1),
+            opacity 0.35s ease;
+    }
+
+
+    .modal.show .modal-content {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    /* ===== input ===== */
+    input,
+    textarea,
+    select {
+        font-size: 16px;
+    }
+
+    /* ===== button ===== */
+    .btn-primary,
+    .btn-secondary,
+    button {
+        padding: 14px;
+        font-size: 14px;
+        margin: 5px;
+    }
+}
+
+
+/* ================================================= */
+/* ================= SMALL PHONE =================== */
+/* ================================================= */
+
+@media screen and (max-width: 480px) {
+
+    .header {
+        padding: 16px;
+        margin: 12px;
+        border-radius: 16px;
+    }
+
+    .task-container {
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .modal {
+        padding: 14px;
+    }
+
+    .modal-content {
+        padding: 18px;
+        border-radius: 20px;
+    }
+
+    .header-left h1 {
+        font-size: 18px;
+    }
+
+    .hmin-text {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
+/* ================================================= */
+/* ============ REMOVE DEFAULT BLUE EFFECT ========= */
+/* ================================================= */
+
+button,
+input,
+select,
+textarea,
+a {
+    outline: none !important;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* hilangkan focus & active bawaan browser */
+button:focus,
+button:active,
+input:focus,
+input:active,
+select:focus,
+select:active,
+textarea:focus,
+textarea:active,
+a:focus,
+a:active {
+    outline: none !important;
+}
+
+/* hilangkan inner border khusus firefox */
+button::-moz-focus-inner {
+    border: 0;
+}
