@@ -13,28 +13,29 @@ html {
 
 body {
     margin: 0;
+    position: relative;
+    overflow-x: hidden;
+
     background:
         radial-gradient(circle at 15% 10%, rgba(105, 205, 248, 0.8), transparent 40%),
         radial-gradient(circle at 85% 20%, rgba(78, 193, 255, 0.9), transparent 45%),
         radial-gradient(circle at 50% 100%, rgba(24, 141, 180, 0.9), transparent 50%),
         linear-gradient(160deg, #2494c0, #69b4ff 60%, #61fff4);
-    background-attachment: fixed;
-    color: #0f172a;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    letter-spacing: 0.2px;
+
+    background-size: cover;
 }
 
 /* Ambient Light Layer */
 body::after {
     content: "";
-    position: fixed;
-    inset: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
     pointer-events: none;
-    background:
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 1), transparent 60%);
-    mix-blend-mode: overlay;
-    opacity: 0.9;
+    background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.6), transparent 70%);
+    opacity: 0.6;
 }
 
 /* ================================================= */
@@ -425,7 +426,17 @@ textarea::placeholder {
 /* ================================================= */
 
 @media screen and (max-width: 768px) {
-
+    .header,
+    .task-card,
+    .modal-content,
+    .logo-group img.logo,
+    button,
+    input,
+    textarea,
+    select {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
     html, body {
         min-height: 100dvh;
     }
