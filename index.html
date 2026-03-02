@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>OSIS To-Do-List</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -20,12 +21,6 @@
 
         <div class="header-right">
             <button id="addBtn" class="btn-primary">+ Add Task</button>
-            <button id="exportBtn" class="btn-secondary">Export Task TXT</button>
-            <button id="exportTemplateBtn" class="btn-secondary">Export Template TXT</button>
-            <input type="file" id="importFile" hidden>
-            <button onclick="document.getElementById('importFile').click()" class="btn-secondary">
-                Import Task TXT
-            </button>
         </div>
     </header>
 
@@ -38,10 +33,8 @@
         <div class="modal-content">
             <h2>Tambah Task</h2>
 
-            <label>Template Kegiatan</label>
-            <select id="taskTemplate">
-                <option value="">-- Pilih Template --</option>
-            </select>
+            <label>Nama Penulis</label>
+            <input type="text" id="taskAuthor">
 
             <label>Nama Tugas</label>
             <input type="text" id="taskName">
@@ -58,10 +51,6 @@
                 <option>Progress</option>
                 <option>Selesai</option>
             </select>
-
-            <button type="button" id="saveTemplate" class="btn-secondary">
-                Simpan jadi Template
-            </button>
 
             <div class="modal-actions">
                 <button id="saveTask" class="btn-primary">Simpan</button>
