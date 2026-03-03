@@ -1,4 +1,4 @@
-
+// 🔥 IMPORT FIREBASE
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
@@ -10,7 +10,7 @@ import {
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 🔧 CONFIG (TIDAK DIHAPUS)
+// 🔧 CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDzmRFkcpk54IJpK9fmhRJMJv20EkubNVA",
   authDomain: "osis-planner.firebaseapp.com",
@@ -23,33 +23,43 @@ const firebaseConfig = {
 // 🚀 INIT
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-// 📦 COLLECTION
 const taskCol = collection(db, "tasks");
 
 // ================= DOM =================
 const taskContainer = document.getElementById("taskContainer");
 const modal = document.getElementById("taskModal");
 
+// 🔥 DELETE ALERT DOM
+const deleteAlert = document.getElementById("deleteAlert");
+const deleteConfirmBtn = document.getElementById("deleteConfirm");
+const deleteCancelBtn = document.getElementById("deleteCancel");
+
+let deleteTargetId = null;
+
 const taskAuthor = document.getElementById("taskAuthor");
 const taskName = document.getElementById("taskName");
 const taskDesc = document.getElementById("taskDesc");
 const taskDeadline = document.getElementById("taskDeadline");
 const taskStatus = document.getElementById("taskStatus");
+const taskCategory = document.getElementById("taskCategory");
 
 const addBtn = document.getElementById("addBtn");
 const saveBtn = document.getElementById("saveTask");
 const cancelBtn = document.getElementById("cancelTask");
 const downloadBtn = document.getElementById("downloadBtn");
 
-// 🔥 Statistik DOM
 const totalCount = document.getElementById("totalCount");
 const pendingCount = document.getElementById("pendingCount");
 const doneCount = document.getElementById("doneCount");
 const lateCount = document.getElementById("lateCount");
 
+const tabs = document.querySelectorAll(".tab");
+const darkToggle = document.getElementById("darkToggle");
+const searchInput = document.getElementById("searchInput");
+
 let editId = null;
 let allTasks = [];
+let activeTab = "Umum";
 
 // ================= MODAL =================
 function openModal(edit = false, task = null) {
@@ -62,6 +72,7 @@ function openModal(edit = false, task = null) {
     taskDesc.value = task.desc || "";
     taskDeadline.value = task.deadline || "";
     taskStatus.value = task.status || "Belum mulai";
+    taskCategory.value = task.kategori ?? "Umum";
   } else {
     editId = null;
     taskAuthor.value = "";
@@ -69,6 +80,7 @@ function openModal(edit = false, task = null) {
     taskDesc.value = "";
     taskDeadline.value = "";
     taskStatus.value = "Belum mulai";
+    taskCategory.value = "Umum";
   }
 }
 
@@ -80,7 +92,6 @@ function closeModal() {
 function getUrgency(deadline) {
   const today = new Date();
   const d = new Date(deadline);
-
   today.setHours(0,0,0,0);
   d.setHours(0,0,0,0);
 
@@ -92,11 +103,9 @@ function getUrgency(deadline) {
   return "normal";
 }
 
-// 🔥 H-MIN WEB
 function getHmin(deadline) {
   const today = new Date();
   const d = new Date(deadline);
-
   today.setHours(0,0,0,0);
   d.setHours(0,0,0,0);
 
@@ -107,11 +116,9 @@ function getHmin(deadline) {
   return `🚨 Terlambat ${Math.abs(diff)} hari`;
 }
 
-// 🔥 H-MIN PDF
 function getHminPDF(deadline) {
   const today = new Date();
   const d = new Date(deadline);
-
   today.setHours(0,0,0,0);
   d.setHours(0,0,0,0);
 
@@ -122,11 +129,29 @@ function getHminPDF(deadline) {
   return `Terlambat ${Math.abs(diff)} hari`;
 }
 
-// 🔥 SORT DEADLINE
-function sortByDeadline(tasks) {
-  return tasks.sort((a, b) => {
-    return new Date(a.deadline) - new Date(b.deadline);
+// ================= FILTER & SORT =================
+function filterByTab(tasks) {
+  return tasks.filter(task => {
+    const kategori = task.kategori ?? "Umum";
+    return kategori === activeTab;
   });
+}
+
+function sortByDeadline(tasks) {
+  return tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+}
+
+function searchTasks(tasks) {
+  if (!searchInput) return tasks;
+
+  const keyword = searchInput.value.toLowerCase().trim();
+  if (!keyword) return tasks;
+
+  return tasks.filter(task =>
+    task.name.toLowerCase().includes(keyword) ||
+    task.author.toLowerCase().includes(keyword) ||
+    (task.desc && task.desc.toLowerCase().includes(keyword))
+  );
 }
 
 // ================= STATISTIK =================
@@ -147,9 +172,7 @@ function updateStats(tasks) {
       done++;
     } else {
       pending++;
-      if (deadline < today) {
-        late++;
-      }
+      if (deadline < today) late++;
     }
   });
 
@@ -173,6 +196,7 @@ function renderTasks(tasks) {
     card.innerHTML = `
       <div class="task-title">${task.name}</div>
       <div class="task-meta">👤 ${task.author}</div>
+      <div class="task-meta">📂 ${task.kategori ?? "Umum"}</div>
       <div class="task-desc">${task.desc || ""}</div>
       <div class="task-meta">📅 ${task.deadline}</div>
       <div class="task-meta hmin-text">${hminText}</div>
@@ -197,9 +221,12 @@ onSnapshot(taskCol, snapshot => {
     ...doc.data()
   }));
 
-  const sorted = sortByDeadline([...allTasks]);
+  let filtered = filterByTab(allTasks);
+  filtered = searchTasks(filtered);
+  const sorted = sortByDeadline([...filtered]);
+
   renderTasks(sorted);
-  updateStats(allTasks); // 🔥 Statistik realtime
+  updateStats(filtered);
 });
 
 // ================= CRUD =================
@@ -213,16 +240,50 @@ async function updateTask(id, task) {
 }
 
 async function deleteTask(id) {
-  if (confirm("Hapus task ini?")) {
-    const ref = doc(db, "tasks", id);
-    await deleteDoc(ref);
+  deleteTargetId = id;
+  deleteAlert.classList.add("show");
+}
+
+// ================= DELETE ALERT =================
+deleteCancelBtn.onclick = () => {
+  deleteTargetId = null;
+  deleteAlert.classList.remove("show");
+};
+
+deleteConfirmBtn.onclick = async () => {
+  if (!deleteTargetId) return;
+  const ref = doc(db, "tasks", deleteTargetId);
+  await deleteDoc(ref);
+  deleteTargetId = null;
+  deleteAlert.classList.remove("show");
+};
+
+// ================= CUSTOM ALERT FUNCTION =================
+function showAlert(message) {
+  const alertBox = document.getElementById('customAlert');
+  alertBox.textContent = message;
+  alertBox.classList.add('show');
+
+  // 🔔 mainin vibrator
+  if (navigator.vibrate) {
+    navigator.vibrate([200, 100, 200]);
   }
+
+  setTimeout(() => {
+      alertBox.classList.remove('show');
+  }, 2000);
 }
 
 // ================= SAVE =================
 saveBtn.onclick = async () => {
   if (!taskAuthor.value || !taskName.value || !taskDeadline.value) {
-    alert("Nama penulis, nama tugas & deadline wajib diisi");
+    if (!taskAuthor.value) {
+      showAlert("Nama penulis wajib diisi!");
+    } else if (!taskName.value) {
+      showAlert("Nama tugas wajib diisi!");
+    } else if (!taskDeadline.value) {
+      showAlert("Deadline wajib diisi!");
+    }
     return;
   }
 
@@ -231,7 +292,8 @@ saveBtn.onclick = async () => {
     name: taskName.value,
     desc: taskDesc.value,
     deadline: taskDeadline.value,
-    status: taskStatus.value
+    status: taskStatus.value,
+    kategori: taskCategory.value || "Umum"
   };
 
   if (editId) {
@@ -246,10 +308,39 @@ saveBtn.onclick = async () => {
 addBtn.onclick = () => openModal();
 cancelBtn.onclick = () => closeModal();
 
+// ================= TAB SYSTEM =================
+tabs.forEach(tab => {
+  tab.onclick = () => {
+    tabs.forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+
+    activeTab = tab.dataset.tab;
+
+    let filtered = filterByTab(allTasks);
+    filtered = searchTasks(filtered);
+    const sorted = sortByDeadline([...filtered]);
+
+    renderTasks(sorted);
+    updateStats(filtered);
+  };
+});
+
+// ================= SEARCH REALTIME =================
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    let filtered = filterByTab(allTasks);
+    filtered = searchTasks(filtered);
+    const sorted = sortByDeadline([...filtered]);
+
+    renderTasks(sorted);
+    updateStats(filtered);
+  });
+}
+
 // ================= DOWNLOAD PDF =================
 downloadBtn.onclick = () => {
   if (allTasks.length === 0) {
-    alert("Tidak ada data untuk di-download");
+    showAlert("Tidak ada data untuk di-download");
     return;
   }
 
@@ -266,6 +357,7 @@ downloadBtn.onclick = () => {
   const tableData = sorted.map(task => [
     task.author,
     task.name,
+    task.kategori ?? "Umum",
     task.desc || "-",
     task.deadline,
     getHminPDF(task.deadline),
@@ -273,10 +365,41 @@ downloadBtn.onclick = () => {
   ]);
 
   doc.autoTable({
-    head: [["Penulis", "Tugas", "Deskripsi", "Deadline", "H-Min", "Status"]],
+    head: [["Penulis", "Tugas", "Kategori", "Deskripsi", "Deadline", "H-Min", "Status"]],
     body: tableData,
     startY: 40,
   });
 
   doc.save("OSIS-ToDo-List.pdf");
 };
+
+// ================= DARK MODE =================
+function enableDarkMode() {
+  document.body.classList.add("dark");
+  localStorage.setItem("darkMode", "enabled");
+  if (darkToggle) darkToggle.textContent = "☀️";
+}
+
+function disableDarkMode() {
+  document.body.classList.remove("dark");
+  localStorage.setItem("darkMode", "disabled");
+  if (darkToggle) darkToggle.textContent = "🌙";
+}
+
+// Load preference saat pertama buka
+if (localStorage.getItem("darkMode") === "enabled") {
+  enableDarkMode();
+} else {
+  disableDarkMode();
+}
+
+// Toggle click
+if (darkToggle) {
+  darkToggle.addEventListener("click", () => {
+    if (document.body.classList.contains("dark")) {
+      disableDarkMode();
+    } else {
+      enableDarkMode();
+    }
+  });
+}
