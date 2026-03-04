@@ -1323,7 +1323,8 @@ body.dark .dark-toggle {
     -webkit-text-fill-color: transparent;
 }
 
-.auth-container input {
+.auth-container input,
+.auth-container select {
     width: 100%;
     max-width: 360px;
     padding: 14px 16px;
