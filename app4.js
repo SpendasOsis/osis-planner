@@ -9,7 +9,14 @@ import {
   doc,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+// 🔐 IMPORT AUTH (TAMBAHAN)
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 // 🔧 CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDzmRFkcpk54IJpK9fmhRJMJv20EkubNVA",
@@ -24,6 +31,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const taskCol = collection(db, "tasks");
+// 🔐 INIT AUTH (TAMBAHAN)
+const auth = getAuth(app);
 
 // ================= DOM =================
 const taskContainer = document.getElementById("taskContainer");
@@ -56,6 +65,18 @@ const lateCount = document.getElementById("lateCount");
 const tabs = document.querySelectorAll(".tab");
 const darkToggle = document.getElementById("darkToggle");
 const searchInput = document.getElementById("searchInput");
+// ================= AUTH DOM (TAMBAHAN) =================
+const appContent = document.getElementById("appContent");
+const authContainer = document.getElementById("authContainer");
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const authUsername = document.getElementById("authUsername");
+const authPassword = document.getElementById("authPassword");
+
+function makeEmail(username) {
+  return username.trim().toLowerCase() + "@osis.local";
+}
 
 let editId = null;
 let allTasks = [];
@@ -213,21 +234,45 @@ function renderTasks(tasks) {
     taskContainer.appendChild(card);
   });
 }
+// ================= AUTH STATE PROTECTION (FIX) =================
+let unsubscribe = null;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    authContainer.style.display = "none";
+    appContent.style.display = "block";
 
-// ================= REALTIME =================
-onSnapshot(taskCol, snapshot => {
-  allTasks = snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  }));
+    // 🔥 Pasang realtime listener setelah login
+    if (!unsubscribe) {
+      unsubscribe = onSnapshot(taskCol, snapshot => {
+        allTasks = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
 
-  let filtered = filterByTab(allTasks);
-  filtered = searchTasks(filtered);
-  const sorted = sortByDeadline([...filtered]);
+        let filtered = filterByTab(allTasks);
+        filtered = searchTasks(filtered);
+        const sorted = sortByDeadline([...filtered]);
 
-  renderTasks(sorted);
-  updateStats(filtered);
+        renderTasks(sorted);
+        updateStats(filtered);
+      });
+    }
+
+  } else {
+    authContainer.style.display = "flex";
+    appContent.style.display = "none";
+
+    // 🔥 Matikan listener saat logout
+    if (unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
+    }
+
+    taskContainer.innerHTML = "";
+    allTasks = [];
+  }
 });
+
 
 // ================= CRUD =================
 async function addTask(task) {
@@ -260,18 +305,110 @@ deleteConfirmBtn.onclick = async () => {
 
 // ================= CUSTOM ALERT FUNCTION =================
 function showAlert(message) {
-  const alertBox = document.getElementById('customAlert');
-  alertBox.textContent = message;
-  alertBox.classList.add('show');
+  const alertBox = document.getElementById("customAlert");
 
-  // 🔔 mainin vibrator
+  if (!alertBox) {
+    console.error("customAlert tidak ditemukan!");
+    return;
+  }
+
+  // Reset dulu biar bisa trigger ulang
+  alertBox.classList.remove("show");
+
+  // Paksa reflow biar animasi bisa ulang
+  void alertBox.offsetWidth;
+
+  alertBox.textContent = message;
+  alertBox.classList.add("show");
+
   if (navigator.vibrate) {
     navigator.vibrate([200, 100, 200]);
   }
 
   setTimeout(() => {
-      alertBox.classList.remove('show');
+    alertBox.classList.remove("show");
   }, 2000);
+}
+// ================= AUTH SYSTEM (TAMBAHAN) =================
+
+if (registerBtn) {
+  registerBtn.onclick = async () => {
+    if (!authUsername.value || !authPassword.value) {
+      showAlert("Username & password wajib diisi");
+      return;
+    }
+
+    if (authPassword.value.length < 6) {
+      showAlert("Password minimal 6 karakter");
+      return;
+    }
+
+    try {
+      await createUserWithEmailAndPassword(
+        auth,
+        makeEmail(authUsername.value),
+        authPassword.value
+      );
+      showAlert("Akun berhasil dibuat!");
+    } catch (err) {
+      showAlert("Gagal daftar: " + err.message);
+    }
+  };
+}
+
+if (loginBtn) {
+  loginBtn.onclick = async () => {
+
+    const username = authUsername.value.trim();
+    const password = authPassword.value.trim();
+
+    if (!username && !password) {
+      showAlert("Username dan password wajib diisi");
+      return;
+    }
+
+    if (!username) {
+      showAlert("Username wajib diisi");
+      return;
+    }
+
+    if (!password) {
+      showAlert("Password wajib diisi");
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        makeEmail(username),
+        password
+      );
+
+      showAlert("Login berhasil ✅");
+
+    } catch (error) {
+
+      if (error.code === "auth/user-not-found") {
+        showAlert("Username tidak ditemukan");
+      } 
+      else if (error.code === "auth/wrong-password") {
+        showAlert("Password salah");
+      } 
+      else if (error.code === "auth/invalid-credential") {
+        showAlert("Username atau password salah");
+      } 
+      else {
+        showAlert("Gagal login: " + error.message);
+      }
+
+    }
+  };
+}
+
+if (logoutBtn) {
+  logoutBtn.onclick = async () => {
+    await signOut(auth);
+  };
 }
 
 // ================= SAVE =================
