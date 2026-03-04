@@ -1439,3 +1439,207 @@ body.dark #registerBtn {
     color: white;
     border: 1px solid #444;
 }
+/* ================================================= */
+/* ================= PROFILE SCREEN ================ */
+/* ================================================= */
+
+#profileScreen {
+    display: none;
+    min-height: 100vh;
+    padding: 40px 50px;
+}
+
+/* wrapper biar sejajar sama stats & search */
+.profile-wrapper {
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+/* card utama profile */
+.profile-card {
+    padding: 40px;
+    border-radius: 30px;
+
+    background:
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.95),
+            rgba(240, 249, 255, 0.75));
+
+    backdrop-filter: blur(60px) saturate(200%);
+    -webkit-backdrop-filter: blur(60px) saturate(200%);
+
+    border: 1px solid rgba(186, 230, 253, 0.8);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 1),
+        0 30px 70px rgba(14, 165, 233, 0.4);
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* title */
+.profile-title {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff6600, #f49200, #c75e02);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* info row */
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.profile-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* sekbid member list */
+.sekbid-list {
+    margin-top: 10px;
+    padding: 20px;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(186, 230, 253, 0.8);
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sekbid-list li {
+    list-style: none;
+    padding: 10px 14px;
+    border-radius: 14px;
+
+    background: rgba(186, 230, 253, 0.4);
+    font-weight: 600;
+}
+
+/* back button */
+.profile-back {
+    align-self: flex-start;
+}
+
+/* ================= DARK MODE ================= */
+
+body.dark #profileScreen {
+    background: #121212;
+}
+
+body.dark .profile-card {
+    background: #1e1e1e;
+    border: 1px solid #333;
+}
+
+body.dark .profile-value {
+    color: #f1f1f1;
+}
+
+body.dark .sekbid-list {
+    background: #2a2a2a;
+    border: 1px solid #333;
+}
+
+body.dark .sekbid-list li {
+    background: #333;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media screen and (max-width: 768px) {
+
+    #profileScreen {
+        padding: 20px;
+    }
+
+    .profile-card {
+        padding: 25px;
+        border-radius: 22px;
+    }
+
+    .profile-title {
+        font-size: 22px;
+    }
+
+    .profile-value {
+        font-size: 18px;
+    }
+}
+/* ================= PROFILE ================= */
+
+.profile-card {
+    background: var(--card-bg, #ffffff);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    max-width: 400px;
+    margin: auto;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff, #6fd3ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: white;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 8px 20px rgba(79, 140, 255, 0.3);
+}
+
+.profile-card p {
+    margin: 10px 0;
+    font-size: 15px;
+}
+.comment-section {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.comment-input {
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.comment-btn {
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.comment-list {
+    margin-top: 8px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.comment-item {
+    font-size: 13px;
+    margin-top: 4px;
+}
