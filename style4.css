@@ -1096,7 +1096,7 @@ select:focus {
 .btn-secondary {
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.25);
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 .btn-secondary:hover {
@@ -1107,19 +1107,19 @@ select:focus {
 
 /* ================= DOWNLOAD BUTTON FIX ================= */
 
-#downloadBtn {
+/* #downloadBtn {
     color: #000 !important;
-}
+}*/
 
 #downloadBtn:hover {
     color: #000 !important;
-}
+} 
 
 /* ================= DOWNLOAD BUTTON FIX ================= */
 
-#cancelTask {
+/* #cancelTask {
     color: #000 !important;
-}
+} */
 
 #cancelTask:hover {
     color: #000 !important;
