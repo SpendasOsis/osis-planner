@@ -34,6 +34,16 @@ const firebaseConfig = {
 
 // 🚀 INIT
 const app = initializeApp(firebaseConfig);
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/firebase-messaging-sw.js")
+    .then((registration) => {
+      console.log("Service Worker registered:", registration);
+    })
+    .catch((err) => {
+      console.error("SW registration failed:", err);
+    });
+}
 const messaging = getMessaging(app);
 const db = getFirestore(app);
 const taskCol = collection(db, "tasks");
