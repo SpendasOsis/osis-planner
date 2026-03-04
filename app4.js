@@ -1018,4 +1018,5 @@ async function setupFCM(userId) {
   } catch (err) {
     console.error("Error FCM:", err);
   }
+  Notification.requestPermission().then(p => console.log("Permission:", p));
 }
