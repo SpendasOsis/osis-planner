@@ -14,6 +14,7 @@
     </style>
 
     <link rel="stylesheet" href="style4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- jsPDF CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -21,15 +22,30 @@
 </head>
 
 <body>
-            <!-- ================= CUSTOM ALERT ================= -->
-            <div id="customAlert" class="custom-alert"></div>
+    <!-- ================= CUSTOM ALERT ================= -->
+    <div id="customAlert" class="custom-alert"></div>
     <button id="darkToggle" class="dark-toggle">🌙</button>
 
     <!-- ================= AUTH CONTAINER ================= -->
     <div id="authContainer" class="auth-container" style="display:none;">
-        <h2>Login / Register</h2>
-        <input type="text" id="authUsername" placeholder="Username">
-        <input type="password" id="authPassword" placeholder="Password">
+        <h2>Masuk / Daftar</h2>
+        <input type="text" id="authUsername" placeholder="Nama Pengguna">
+        <input type="password" id="authPassword" placeholder="Kata Sandi">
+
+        <!-- TAMBAHAN DROPDOWN ROLE -->
+        <select id="authRole">
+            <option value="" disabled selected>Pilih Role</option>
+            <option value="Pembina">Pembina</option>
+            <option value="Trio">Trio</option>
+            <option value="Inti">Inti</option>
+            <option value="Sekbid 1">Sekbid 1</option>
+            <option value="Sekbid 2">Sekbid 2</option>
+            <option value="Sekbid 3">Sekbid 3</option>
+            <option value="Sekbid 4">Sekbid 4</option>
+            <option value="Sekbid 5">Sekbid 5</option>
+            <option value="Sekbid 6">Sekbid 6</option>
+        </select>
+
         <div class="auth-actions">
             <button id="loginBtn" class="btn-primary">Masuk</button>
             <button id="registerBtn" class="btn-secondary">Daftar</button>
@@ -49,9 +65,10 @@
             </div>
 
             <div class="header-right">
-                <button id="addBtn" class="btn-primary">+ Add Task</button>
+                <button id="profileBtn" class="btn-secondary">Profile</button>
+                <button id="addBtn" class="btn-primary">+ Tambahkan Tugas</button>
                 <button id="downloadBtn" class="btn-secondary">⬇ Download PDF</button>
-                <button id="logoutBtn" class="btn-danger">Logout</button>
+                <button id="logoutBtn" class="btn-danger">Keluar dari akun</button>
             </div>
         </header>
 
@@ -59,6 +76,8 @@
         <section class="tab-wrapper">
             <div class="tabs">
                 <button class="tab active" data-tab="Umum">Umum</button>
+                <button class="tab" data-tab="Trio">Trio</button>
+                <button class="tab" data-tab="Inti">Inti</button>
                 <button class="tab" data-tab="Sekbid 1">Sekbid 1</button>
                 <button class="tab" data-tab="Sekbid 2">Sekbid 2</button>
                 <button class="tab" data-tab="Sekbid 3">Sekbid 3</button>
@@ -132,6 +151,8 @@
                 <label>Kategori</label>
                 <select id="taskCategory">
                     <option value="Umum">Umum</option>
+                    <option value="Trio">Trio</option>
+                    <option value="Inti">Inti</option>
                     <option value="Sekbid 1">Sekbid 1</option>
                     <option value="Sekbid 2">Sekbid 2</option>
                     <option value="Sekbid 3">Sekbid 3</option>
@@ -179,7 +200,29 @@
 
 
     </div>
+<!-- ================= PROFILE SCREEN ================= -->
+<div id="profileScreen" style="display:none; padding:40px;">
 
+    <h2>Profile</h2>
+
+    <div class="profile-card">
+<!-- AVATAR BULAT -->
+<div class="profile-avatar">
+    👤
+</div>
+
+        <p><strong>Nama Pengguna :</strong> <span id="profileUsername"></span></p>
+        <p><strong>Role :</strong> <span id="profileRole"></span></p>
+    </div>
+
+
+
+    <br>
+    <button id="backToDashboard" class="btn-primary">
+        ← Kembali ke Dashboard
+    </button>
+
+</div>
     <!-- ================= FOOTER ================= -->
     <footer class="footer">
         <div class="footer-content">
