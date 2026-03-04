@@ -21,147 +21,164 @@
 </head>
 
 <body>
+            <!-- ================= CUSTOM ALERT ================= -->
+            <div id="customAlert" class="custom-alert"></div>
     <button id="darkToggle" class="dark-toggle">🌙</button>
-    <!-- ================= HEADER ================= -->
-    <header class="header">
-        <div class="header-left">
-            <div class="logo-wrapper">
-                <img src="spendas.png" class="logo" alt="Logo Sekolah">
-                <img src="osis25.png" class="logo" alt="Logo OSIS">
+
+    <!-- ================= AUTH CONTAINER ================= -->
+    <div id="authContainer" class="auth-container" style="display:none;">
+        <h2>Login / Register</h2>
+        <input type="text" id="authUsername" placeholder="Username">
+        <input type="password" id="authPassword" placeholder="Password">
+        <div class="auth-actions">
+            <button id="loginBtn" class="btn-primary">Login</button>
+            <button id="registerBtn" class="btn-secondary">Register</button>
+        </div>
+    </div>
+
+    <!-- ================= APP CONTENT ================= -->
+    <div id="appContent" style="display:none;">
+        <!-- ================= HEADER ================= -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo-wrapper">
+                    <img src="spendas.png" class="logo" alt="Logo Sekolah">
+                    <img src="osis25.png" class="logo" alt="Logo OSIS">
+                </div>
+                <h1>OSIS To-Do-List</h1>
             </div>
-            <h1>OSIS To-Do-List</h1>
-        </div>
 
-        <div class="header-right">
-            <button id="addBtn" class="btn-primary">+ Add Task</button>
+            <div class="header-right">
+                <button id="addBtn" class="btn-primary">+ Add Task</button>
+                <button id="downloadBtn" class="btn-secondary">⬇ Download PDF</button>
+                <button id="logoutBtn" class="btn-danger">Logout</button>
+            </div>
+        </header>
 
-            <button id="downloadBtn" class="btn-secondary">⬇ Download PDF</button>
-        </div>
-    </header>
-
-    <!-- ================= TAB BAR ================= -->
-    <section class="tab-wrapper">
-        <div class="tabs">
-            <button class="tab active" data-tab="Umum">Umum</button>
-            <button class="tab" data-tab="Sekbid 1">Sekbid 1</button>
-            <button class="tab" data-tab="Sekbid 2">Sekbid 2</button>
-            <button class="tab" data-tab="Sekbid 3">Sekbid 3</button>
-            <button class="tab" data-tab="Sekbid 4">Sekbid 4</button>
-            <button class="tab" data-tab="Sekbid 5">Sekbid 5</button>
-            <button class="tab" data-tab="Sekbid 6">Sekbid 6</button>
-        </div>
-    </section>
-    <!-- ================= SEARCH BAR ================= -->
-    <section class="search-wrapper">
-        <input type="text" id="searchInput" placeholder="🔎 Cari nama tugas, penulis, atau deskripsi...">
-    </section>
-
-    <!-- ================= MAIN ================= -->
-    <main>
-
-        <!-- ===== STATISTICS ===== -->
-        <section class="stats-wrapper">
-            <div class="stats-bubble">
-
-                <div class="stat-item">
-                    <span class="stat-label">Total</span>
-                    <span class="stat-value" id="totalCount">0</span>
-                </div>
-
-                <div class="stat-divider"></div>
-
-                <div class="stat-item">
-                    <span class="stat-label">Belum / Progress</span>
-                    <span class="stat-value" id="pendingCount">0</span>
-                </div>
-
-                <div class="stat-divider"></div>
-
-                <div class="stat-item">
-                    <span class="stat-label">Selesai</span>
-                    <span class="stat-value" id="doneCount">0</span>
-                </div>
-
-                <div class="stat-divider"></div>
-
-                <div class="stat-item">
-                    <span class="stat-label">Terlambat</span>
-                    <span class="stat-value danger" id="lateCount">0</span>
-                </div>
-
+        <!-- ================= TAB BAR ================= -->
+        <section class="tab-wrapper">
+            <div class="tabs">
+                <button class="tab active" data-tab="Umum">Umum</button>
+                <button class="tab" data-tab="Sekbid 1">Sekbid 1</button>
+                <button class="tab" data-tab="Sekbid 2">Sekbid 2</button>
+                <button class="tab" data-tab="Sekbid 3">Sekbid 3</button>
+                <button class="tab" data-tab="Sekbid 4">Sekbid 4</button>
+                <button class="tab" data-tab="Sekbid 5">Sekbid 5</button>
+                <button class="tab" data-tab="Sekbid 6">Sekbid 6</button>
             </div>
         </section>
 
-        <!-- ===== TASK CONTAINER ===== -->
-        <section id="taskContainer" class="task-container"></section>
+        <!-- ================= SEARCH BAR ================= -->
+        <section class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="🔎 Cari nama tugas, penulis, atau deskripsi...">
+        </section>
 
-    </main>
+        <!-- ================= MAIN ================= -->
+        <main>
 
-    <!-- ================= MODAL TAMBAH TASK ================= -->
-    <div id="taskModal" class="modal">
-        <div class="modal-content">
+            <!-- ===== STATISTICS ===== -->
+            <section class="stats-wrapper">
+                <div class="stats-bubble">
 
-            <h2>Tambah Task</h2>
+                    <div class="stat-item">
+                        <span class="stat-label">Total</span>
+                        <span class="stat-value" id="totalCount">0</span>
+                    </div>
 
-            <label>Nama Penulis</label>
-            <input type="text" id="taskAuthor" autocomplete="off">
+                    <div class="stat-divider"></div>
 
-            <label>Nama Tugas</label>
-            <input type="text" id="taskName" autocomplete="off">
+                    <div class="stat-item">
+                        <span class="stat-label">Belum / Progress</span>
+                        <span class="stat-value" id="pendingCount">0</span>
+                    </div>
 
-            <label>Deskripsi</label>
-            <textarea id="taskDesc"></textarea>
+                    <div class="stat-divider"></div>
 
-            <label>Kategori</label>
-            <select id="taskCategory">
-                <option value="Umum">Umum</option>
-                <option value="Sekbid 1">Sekbid 1</option>
-                <option value="Sekbid 2">Sekbid 2</option>
-                <option value="Sekbid 3">Sekbid 3</option>
-                <option value="Sekbid 4">Sekbid 4</option>
-                <option value="Sekbid 5">Sekbid 5</option>
-                <option value="Sekbid 6">Sekbid 6</option>
-            </select>
+                    <div class="stat-item">
+                        <span class="stat-label">Selesai</span>
+                        <span class="stat-value" id="doneCount">0</span>
+                    </div>
 
-            <label>Deadline</label>
-            <input type="date" id="taskDeadline">
+                    <div class="stat-divider"></div>
 
-            <label>Status</label>
-            <select id="taskStatus">
-                <option>Belum mulai</option>
-                <option>Progress</option>
-                <option>Selesai</option>
-            </select>
+                    <div class="stat-item">
+                        <span class="stat-label">Terlambat</span>
+                        <span class="stat-value danger" id="lateCount">0</span>
+                    </div>
 
-            <div class="modal-actions">
-                <button id="saveTask" class="btn-primary">Simpan</button>
-                <button id="cancelTask" class="btn-secondary">Batal</button>
+                </div>
+            </section>
+
+            <!-- ===== TASK CONTAINER ===== -->
+            <section id="taskContainer" class="task-container"></section>
+
+        </main>
+
+        <!-- ================= MODAL TAMBAH TASK ================= -->
+        <div id="taskModal" class="modal">
+            <div class="modal-content">
+
+                <h2>Tambah Task</h2>
+
+                <label>Nama Penulis</label>
+                <input type="text" id="taskAuthor" autocomplete="off">
+
+                <label>Nama Tugas</label>
+                <input type="text" id="taskName" autocomplete="off">
+
+                <label>Deskripsi</label>
+                <textarea id="taskDesc"></textarea>
+
+                <label>Kategori</label>
+                <select id="taskCategory">
+                    <option value="Umum">Umum</option>
+                    <option value="Sekbid 1">Sekbid 1</option>
+                    <option value="Sekbid 2">Sekbid 2</option>
+                    <option value="Sekbid 3">Sekbid 3</option>
+                    <option value="Sekbid 4">Sekbid 4</option>
+                    <option value="Sekbid 5">Sekbid 5</option>
+                    <option value="Sekbid 6">Sekbid 6</option>
+                </select>
+
+                <label>Deadline</label>
+                <input type="date" id="taskDeadline">
+
+                <label>Status</label>
+                <select id="taskStatus">
+                    <option>Belum mulai</option>
+                    <option>Progress</option>
+                    <option>Selesai</option>
+                </select>
+
+                <div class="modal-actions">
+                    <button id="saveTask" class="btn-primary">Simpan</button>
+                    <button id="cancelTask" class="btn-secondary">Batal</button>
+                </div>
+
             </div>
-
         </div>
-    </div>
 
-    <!-- ================= CUSTOM DELETE ALERT ================= -->
-    <div id="deleteAlert" class="delete-alert-overlay">
-        <div class="delete-alert-box">
+        <!-- ================= CUSTOM DELETE ALERT ================= -->
+        <div id="deleteAlert" class="delete-alert-overlay">
+            <div class="delete-alert-box">
 
-            <div class="delete-alert-icon">⚠️</div>
+                <div class="delete-alert-icon">⚠️</div>
 
-            <h3>Hapus Task?</h3>
-            <p>Task yang sudah dihapus tidak dapat dikembalikan.</p>
+                <h3>Hapus Task?</h3>
+                <p>Task yang sudah dihapus tidak dapat dikembalikan.</p>
 
-            <div class="delete-alert-actions">
-                <button id="deleteCancel" class="btn-secondary">Batal</button>
-                <button id="deleteConfirm" class="btn-primary danger-btn">
-                    Ya, Hapus
-                </button>
+                <div class="delete-alert-actions">
+                    <button id="deleteCancel" class="btn-secondary">Batal</button>
+                    <button id="deleteConfirm" class="btn-primary danger-btn">
+                        Ya, Hapus
+                    </button>
+                </div>
+
             </div>
-
         </div>
-    </div>
 
-    <!-- ================= CUSTOM ALERT ================= -->
-    <div id="customAlert" class="custom-alert"></div>
+
+    </div>
 
     <!-- ================= FOOTER ================= -->
     <footer class="footer">
