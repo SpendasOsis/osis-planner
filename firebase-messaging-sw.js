@@ -22,8 +22,8 @@ messaging.onBackgroundMessage(function(payload) {
 
   const options = {
     body: payload.data.body,
-    icon: "/icon.png",
-    badge: "/icon.png",
+    icon: "/osis25.png",
+    badge: "/osis25.png",
     data: {
       url: "/"
     }
