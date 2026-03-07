@@ -27,7 +27,6 @@ const messaging = admin.messaging();
 // 🔐 CEK AKSES USER
 // ===============================
 function canAccess(role, category) {
-
   if (!role) return false;
 
   if (role === "Pembina") return true;
@@ -52,11 +51,10 @@ function canAccess(role, category) {
 // 🚀 MAIN FUNCTION
 // ===============================
 async function run() {
-
   console.log("🚀 Mulai cek reminder...");
 
   const today = new Date();
-  today.setHours(0,0,0,0);
+  today.setHours(0, 0, 0, 0);
 
   const taskSnapshot = await db.collection("tasks").get();
   const userSnapshot = await db.collection("users").get();
@@ -65,26 +63,24 @@ async function run() {
   console.log(`👤 Total user: ${userSnapshot.size}`);
 
   for (const taskDoc of taskSnapshot.docs) {
-
     const task = taskDoc.data();
 
     if (!task.deadline || task.status === "Selesai") continue;
 
     const deadline = new Date(task.deadline);
-    deadline.setHours(0,0,0,0);
+    deadline.setHours(0, 0, 0, 0);
 
     const diff = Math.ceil(
       (deadline - today) / (1000 * 60 * 60 * 24)
     );
 
     // hanya H-2 H-1 H-0
-    if (![2,1,0].includes(diff)) continue;
+    if (![2, 1, 0].includes(diff)) continue;
 
     const kategori = task.kategori ?? "Umum";
     const tokens = [];
 
-    userSnapshot.forEach(userDoc => {
-
+    userSnapshot.forEach((userDoc) => {
       const user = userDoc.data();
 
       if (
@@ -94,7 +90,6 @@ async function run() {
       ) {
         tokens.push(...user.fcmTokens);
       }
-
     });
 
     if (tokens.length === 0) {
@@ -125,40 +120,29 @@ async function run() {
     );
 
     try {
-
       const response = await messaging.sendEachForMulticast({
-
         tokens: tokens,
-
-        data: {
+        notification: {
           title: title,
-          body: body
-        }
-
+          body: body,
+        },
       });
 
       console.log(
         `✅ Success: ${response.successCount} | Failed: ${response.failureCount}`
       );
-
     } catch (err) {
-
       console.error("❌ Error kirim notif:", err);
-
     }
-
   }
 
   console.log("🎉 Selesai cek reminder H-2 H-1 H-0");
-
 }
 
 // ===============================
 // RUN
 // ===============================
-run().catch(err => {
-
+run().catch((err) => {
   console.error("❌ Fatal error:", err);
   process.exit(1);
-
 });
