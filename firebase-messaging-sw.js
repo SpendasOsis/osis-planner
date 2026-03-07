@@ -10,3 +10,56 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
+
+// ===============================
+// 🔔 TERIMA NOTIF DI BACKGROUND
+// ===============================
+messaging.onBackgroundMessage(function(payload) {
+
+  console.log("📩 Notif diterima:", payload);
+
+  const title = payload.data.title;
+
+  const options = {
+    body: payload.data.body,
+    icon: "/icon.png",
+    badge: "/icon.png",
+    data: {
+      url: "/"
+    }
+  };
+
+  self.registration.showNotification(title, options);
+
+  // 🔊 PLAY CUSTOM SOUND
+  const audio = new Audio("/osisnot.mp3");
+  audio.play().catch(()=>{});
+});
+
+// ===============================
+// 🔗 KLIK NOTIF BUKA WEBSITE
+// ===============================
+self.addEventListener("notificationclick", function(event) {
+
+  event.notification.close();
+
+  const url = event.notification.data?.url || "/";
+
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true })
+      .then(function(clientList) {
+
+        for (const client of clientList) {
+          if (client.url === url && "focus" in client) {
+            return client.focus();
+          }
+        }
+
+        if (clients.openWindow) {
+          return clients.openWindow(url);
+        }
+
+      })
+  );
+
+});
