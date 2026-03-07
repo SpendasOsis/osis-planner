@@ -84,10 +84,11 @@ async function run() {
       const user = userDoc.data();
 
       if (
-        user.fcmToken &&
+        user.fcmTokens &&
+        user.fcmTokens.length > 0 &&
         canAccess(user.role, kategori)
       ) {
-        tokens.push(user.fcmToken);
+        tokens.push(...user.fcmTokens);
       }
     });
 
@@ -115,7 +116,7 @@ async function run() {
     }
 
     console.log(
-      `📢 Kirim notif "${title}" untuk "${task.name}" ke ${tokens.length} user`
+      `📢 Kirim notif "${title}" untuk "${task.name}" ke ${tokens.length} device`
     );
 
     try {
