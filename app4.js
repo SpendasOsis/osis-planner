@@ -1046,18 +1046,40 @@ async function checkNotificationPermission(userId) {
 
   const permission = Notification.permission;
 
+  // kalau sudah aktif
+  if (permission === "granted") {
+    await setupFCM(userId);
+    return;
+  }
+
+  // kalau ditolak
+  if (permission === "denied") {
+    console.log("User sudah menolak notif");
+    return;
+  }
+
   // kalau belum pernah ditanya
-  if (permission === "default") {
+  const popup = document.getElementById("notifPopup");
+  if (popup) {
+    popup.classList.add("show");
 
-    console.log("Menampilkan popup izin notifikasi...");
+    const allowBtn = document.getElementById("notifAllow");
+    const laterBtn = document.getElementById("notifLater");
 
-    const result = await Notification.requestPermission();
+    allowBtn.onclick = async () => {
 
-    if (result === "granted") {
-      await setupFCM(userId);
-      console.log("Notifikasi diaktifkan otomatis");
-    }
+      const result = await Notification.requestPermission();
 
+      if (result === "granted") {
+        await setupFCM(userId);
+      }
+
+      popup.classList.remove("show");
+    };
+
+    laterBtn.onclick = () => {
+      popup.classList.remove("show");
+    };
   }
 
 }
