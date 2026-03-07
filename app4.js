@@ -546,6 +546,7 @@ onAuthStateChanged(auth, async (user) => {
       }
 
       currentUserRole = userDoc.data().role;
+      await checkNotificationPermission(user.uid);
       console.log("Role user:", currentUserRole);
 
       applyRoleAccess();
@@ -759,6 +760,7 @@ if (loginBtn) {
         makeEmail(username),
         password
       );
+      await checkNotificationPermission(userCredential.user.uid);
 
       // Ambil role user dari Firestore
       const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
@@ -1007,26 +1009,55 @@ if (backToDashboard) {
 }
 async function setupFCM(userId) {
   try {
+
+    console.log("Meminta izin notifikasi...");
+
     const permission = await Notification.requestPermission();
+
     if (permission !== "granted") {
-      console.log("Notif tidak diizinkan");
+      console.log("User menolak notifikasi");
       return;
     }
+
+    console.log("Izin diberikan, mengambil FCM token...");
 
     const token = await getToken(messaging, {
       vapidKey: "BDTpdmLrNwucETSmixmFVgyQax1jIWFeGT8B6tOfYe7apypvTaa3x1KnUXBVPMknJgYCMTa31GjwE4w6KsYJzX0"
     });
 
-    if (!token) return;
+    if (!token) {
+      console.log("Token tidak ditemukan");
+      return;
+    }
 
     await updateDoc(doc(db, "users", userId), {
       fcmTokens: arrayUnion(token)
     });
 
-    console.log("FCM token tersimpan:", token);
+    console.log("FCM token berhasil disimpan:", token);
 
   } catch (err) {
-    console.error("Error FCM:", err);
+    console.error("Error saat setup FCM:", err);
   }
-  Notification.requestPermission().then(p => console.log("Permission:", p));
+}
+async function checkNotificationPermission(userId) {
+
+  if (!("Notification" in window)) return;
+
+  const permission = Notification.permission;
+
+  // kalau belum pernah ditanya
+  if (permission === "default") {
+
+    console.log("Menampilkan popup izin notifikasi...");
+
+    const result = await Notification.requestPermission();
+
+    if (result === "granted") {
+      await setupFCM(userId);
+      console.log("Notifikasi diaktifkan otomatis");
+    }
+
+  }
+
 }
