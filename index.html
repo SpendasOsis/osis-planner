@@ -110,8 +110,14 @@
                         <span class="stat-label">Belum / Progress</span>
                         <span class="stat-value" id="pendingCount">0</span>
                     </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-label">Selesai</span>
+                        <span class="stat-value" id="doneCount">0</span>
+                    </div>
 
-                  
+
+
 
 
                     <div class="stat-divider"></div>
@@ -196,56 +202,56 @@
 
 
     </div>
-<!-- ================= PROFILE SCREEN ================= -->
-<div id="profileScreen" style="display:none; padding:40px;">
+    <!-- ================= PROFILE SCREEN ================= -->
+    <div id="profileScreen" style="display:none; padding:40px;">
 
-    <h2>Profile</h2>
+        <h2>Profile</h2>
 
-    <div class="profile-card">
-<!-- AVATAR BULAT -->
-<div class="profile-avatar">
-    👤
-</div>
+        <div class="profile-card">
+            <!-- AVATAR BULAT -->
+            <div class="profile-avatar">
+                👤
+            </div>
 
-        <p><strong>Nama Pengguna :</strong> <span id="profileUsername"></span></p>
-        <p><strong>Role :</strong> <span id="profileRole"></span></p>
+            <p><strong>Nama Pengguna :</strong> <span id="profileUsername"></span></p>
+            <p><strong>Role :</strong> <span id="profileRole"></span></p>
+        </div>
+
+
+
+        <br>
+        <button id="backToDashboard" class="btn-primary">
+            ← Kembali ke Dashboard
+        </button>
+
     </div>
-
-
-
-    <br>
-    <button id="backToDashboard" class="btn-primary">
-        ← Kembali ke Dashboard
-    </button>
-
-</div>
     <!-- ================= NOTIFICATION PERMISSION POPUP ================= -->
-<div id="notifPopup" class="notif-popup">
+    <div id="notifPopup" class="notif-popup">
 
-  <div class="notif-popup-box">
-    
-    <div class="notif-icon">🔔</div>
+        <div class="notif-popup-box">
 
-    <h3>Aktifkan Notifikasi</h3>
+            <div class="notif-icon">🔔</div>
 
-    <p>
-      Aktifkan notifikasi supaya kamu dapat pengingat tugas
-      sebelum deadline.
-    </p>
+            <h3>Aktifkan Notifikasi</h3>
 
-    <div class="notif-actions">
-      <button id="notifAllow" class="btn-primary">
-  Aktifkan
-</button>
+            <p>
+                Aktifkan notifikasi supaya kamu dapat pengingat tugas
+                sebelum deadline.
+            </p>
 
-<button id="notifLater" class="btn-secondary">
-  Nanti saja
-</button>
+            <div class="notif-actions">
+                <button id="notifAllow" class="btn-primary">
+                    Aktifkan
+                </button>
+
+                <button id="notifLater" class="btn-secondary">
+                    Nanti saja
+                </button>
+            </div>
+
+        </div>
+
     </div>
-
-  </div>
-
-</div>
     <!-- ================= FOOTER ================= -->
     <footer class="footer">
         <div class="footer-content">
