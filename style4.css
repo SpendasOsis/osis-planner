@@ -1113,7 +1113,7 @@ select:focus {
 
 #downloadBtn:hover {
     color: #000 !important;
-} 
+}
 
 /* ================= DOWNLOAD BUTTON FIX ================= */
 
@@ -1297,6 +1297,7 @@ body.dark .dark-toggle {
         transform: translateX(-50%) translateY(0);
     }
 }
+
 /* ================================================= */
 /* ================= LOGIN PAGE ==================== */
 /* ================================================= */
@@ -1440,6 +1441,7 @@ body.dark #registerBtn {
     color: white;
     border: 1px solid #444;
 }
+
 /* ================================================= */
 /* ================= PROFILE SCREEN ================ */
 /* ================================================= */
@@ -1583,6 +1585,7 @@ body.dark .sekbid-list li {
         font-size: 18px;
     }
 }
+
 /* ================= PROFILE ================= */
 
 .profile-card {
@@ -1613,6 +1616,7 @@ body.dark .sekbid-list li {
     margin: 10px 0;
     font-size: 15px;
 }
+
 .comment-section {
     margin-top: 10px;
     display: flex;
@@ -1681,39 +1685,40 @@ body.dark .sekbid-list li {
     font-size: 13px;
     margin-top: 4px;
 }
+
 /* ================= NOTIFICATION POPUP ================= */
 
-.notif-popup{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+.notif-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
 }
 
-.notif-popup.show{
-  display:flex;
+.notif-popup.show {
+    display: flex;
 }
 
-.notif-popup-box{
-  background:white;
-  padding:25px;
-  border-radius:12px;
-  text-align:center;
-  width:320px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.2);
+.notif-popup-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
-.notif-icon{
-  font-size:40px;
-  margin-bottom:10px;
+.notif-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
 }
 
-.notif-actions{
-  margin-top:15px;
-  display:flex;
-  gap:10px;
-  justify-content:center;
+.notif-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
