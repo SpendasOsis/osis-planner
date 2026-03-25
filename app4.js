@@ -144,7 +144,9 @@ function getUrgency(deadline) {
   return "normal";
 }
 
-function getHmin(deadline) {
+function getHmin(deadline, status) {
+  if (status === "Selesai") return "";
+
   const today = new Date();
   const d = new Date(deadline);
   today.setHours(0,0,0,0);
@@ -277,7 +279,15 @@ function applyRoleAccess() {
 }
 
 function sortByDeadline(tasks) {
-  return tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+  return tasks.sort((a, b) => {
+
+    // 1️⃣ Pisahin berdasarkan status dulu
+    if (a.status === "Selesai" && b.status !== "Selesai") return 1;
+    if (a.status !== "Selesai" && b.status === "Selesai") return -1;
+
+    // 2️⃣ Kalau status sama → sort by deadline
+    return new Date(a.deadline) - new Date(b.deadline);
+  });
 }
 
 function searchTasks(tasks) {
@@ -357,7 +367,7 @@ function renderTasks(tasks) {
   tasks.forEach(task => {
     const card = document.createElement("div");
     const urgency = getUrgency(task.deadline);
-    const hminText = getHmin(task.deadline);
+    const hminText = getHmin(task.deadline, task.status);
 
     card.className = `task-card ${urgency}`;
 
